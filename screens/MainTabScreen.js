@@ -7,11 +7,13 @@ import Loginscreen from './Login';
 import Icon from 'react-native-vector-icons/Entypo';
 import About from './About';
 import wishlist from './wishlist';
+import Register from './Register';
 
 const HomeStack = createStackNavigator();
 const LoginStack = createStackNavigator();
 const WishlistStack = createStackNavigator();
 const AboutStack = createStackNavigator();
+
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -64,6 +66,7 @@ const MainTabScreen =()=>(
         ),
       }}
     />
+    
   </Tab.Navigator>
 
 );
@@ -134,5 +137,7 @@ const HomeStackScreen =  ({navigation})=>(
         }>
           <AboutStack.Screen name="About" component={About} />
         </AboutStack.Navigator> 
+        
   );
-  
+
+ 

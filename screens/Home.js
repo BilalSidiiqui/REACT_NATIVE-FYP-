@@ -1,22 +1,21 @@
-import React from 'react';
-import { View, Text, Button, StyleSheet, StatusBar } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import {  FlatList,View, Text, Button, StyleSheet, StatusBar } from 'react-native';
 import { useTheme } from '@react-navigation/native';
-
+import Product from './products'
 const Home = ({navigation}) => {
 
-  const { colors } = useTheme();
+ 
 
-  const theme = useTheme();
-  
     return (
       <View style={styles.container}>
-        <StatusBar barStyle= { theme.dark ? "light-content" : "dark-content" }/>
-        <Text style={{color: colors.text}}>Home Screen</Text>
-      <Button
-        title="Go to Login screen"
-        onPress={() => navigation.navigate("Login")}
-      />
-      </View>
+         <Product/>
+       </View>
+
+        
+      
+         
+     
     );
 };
 

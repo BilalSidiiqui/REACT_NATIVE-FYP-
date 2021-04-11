@@ -1,14 +1,14 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet,TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet,TextInput, TouchableOpacity } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 
-const Login = ({navigation}) => {
+const Register = ({navigation}) => {
 
     return (
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.text_header}>LOGIN </Text>
+          <Text style={styles.text_header}>Register Now !</Text>
         </View>
         <View style={styles.footer}> 
         <View style={styles.action}> 
@@ -18,7 +18,22 @@ const Login = ({navigation}) => {
                 />
         <TextInput 
                     
-                    placeholder="          Your Username"
+                    placeholder="Your Username"
+                    placeholderTextColor="#666666"
+                    style={styles.textInput}
+                    autoCapitalize="none"
+                 
+                />
+                
+            </View>
+            <View style={styles.action}>
+            <FontAwesome 
+                    name="at"
+                    size={20}
+                />
+            <TextInput 
+                    
+                    placeholder="Your Email"
                     placeholderTextColor="#666666"
                     style={styles.textInput}
                     autoCapitalize="none"
@@ -31,7 +46,7 @@ const Login = ({navigation}) => {
                     size={20}
                 />
         <TextInput 
-                    placeholder="          Your Password"
+                    placeholder="Your Password"
                     placeholderTextColor="#666666"
                     style={styles.textInput}
                     autoCapitalize="none"
@@ -41,19 +56,19 @@ const Login = ({navigation}) => {
         <View style={styles.button}>
                 <TouchableOpacity
                     style={styles.signIn}
-                    onPress={() => navigation.navigate("Home")}
+                    onPress={() => navigation.navigate("Login")}
                 >
                 
-                    <Text style={{color:'#fff'}}>Sign In</Text>
+                    <Text style={{color:'#fff'}}>Sign Up</Text>
 
                 </TouchableOpacity>
 
           </View>
          
           <TouchableOpacity
-                    onPress={() => navigation.navigate("Register")}>
+                    onPress={() => navigation.navigate("Login")}>
           <Text style={{color: 'grey', marginTop:10}}>
-          Create an account? Rigister
+          Already have account? SIGN IN
           </Text>
           </TouchableOpacity>
         
@@ -67,7 +82,7 @@ const Login = ({navigation}) => {
     );
 };
 
-export default Login;
+export default Register;
 
 const styles = StyleSheet.create({
   container: {
@@ -97,7 +112,7 @@ const styles = StyleSheet.create({
       color: '#05375a',
       fontSize: 18
   },textInput: {
-    paddingLeft: 10,
+    paddingLeft: 30,
     paddingBottom:10,
     color: '#05375a',
 },  button: {
