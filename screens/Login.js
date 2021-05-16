@@ -1,72 +1,125 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet,TextInput, TouchableOpacity } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import axios from 'axios';
+import {Formik} from 'formik';
+import { View, Text, StyleSheet,TextInput, TouchableOpacity, Button } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage'
+axios.defaults.baseURL="https://ee7345651ad8.ngrok.io/"
+
 
 
 const Login = ({navigation}) => {
+  const LoginHandler = async ({username, password}) => {
+      try {
+        const response = await axios.post('/login/', {
+          username,
+          password,
+                })
 
-    return (
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.text_header}>LOGIN </Text>
-        </View>
-        <View style={styles.footer}> 
-        <View style={styles.action}> 
-        <FontAwesome 
-                    name="user-o"
-                    size={20}
-                />
-        <TextInput 
-                    
-                    placeholder="          Your Username"
-                    placeholderTextColor="#666666"
-                    style={styles.textInput}
-                    autoCapitalize="none"
-                 
-                />
-            </View>
-            <View style={styles.action}>
-            <FontAwesome 
-                    name="lock"
-                    size={20}
-                />
-        <TextInput 
-                    placeholder="          Your Password"
-                    placeholderTextColor="#666666"
-                    style={styles.textInput}
-                    autoCapitalize="none"
-                 
-                />
-        </View>
-        <View style={styles.button}>
-                <TouchableOpacity
-                    style={styles.signIn}
-                    onPress={() => navigation.navigate("Home")}
-                >
-                
-                    <Text style={{color:'#fff'}}>Sign In</Text>
-
-                </TouchableOpacity>
-
+        const responsestr=(response.data);
+        console.log(responsestr.user_id)
+        console.log(responsestr.username)
+        if (responsestr) {
+           await AsyncStorage.setItem("user_id", responsestr.user_id+'')
+           await AsyncStorage.setItem("username",responsestr.username);
+          alert('User Login Successfully!');
+          navigation.navigate('Home');
+        }
+      } catch (error) {
+        alert(error);
+      }
+}
+    return (   
+      <Formik
+      initialValues={{
+        username: '',
+        password: '',
+      }}
+      onSubmit={(values, formikActions) => {
+        LoginHandler(values);
+      }}>
+      {({
+        handleBlur,
+        handleChange,
+        handleSubmit,
+        values,
+  
+      }) => (
+        
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <Text style={styles.text_header}>Login Now !</Text>
           </View>
+          <View style={styles.footer}> 
+          <View style={styles.action}> 
+          <FontAwesome 
+                      name="user-o"
+                      size={20}
+                  />
+          <TextInput 
+                      value={values.username}
+                      onBlur={handleBlur('username')}
+                      onChangeText={handleChange('username')}
+                      placeholder="Your Username"
+                      placeholderTextColor="#666666"
+                      style={styles.textInput}
+                      autoCapitalize="none"
+                   
+                  />
+                  
+              </View>
+             
+              <View style={styles.action}>
+              <FontAwesome 
+                      name="lock"
+                      size={20}
+                  />
+          <TextInput 
+                      placeholder="Your Password"
+                      placeholderTextColor="#666666"
+                      style={styles.textInput}
+                      autoCapitalize="none"
+                      value={values.password}
+                      onBlur={handleBlur('password')}
+                      onChangeText={handleChange('password')}
+                      secureTextEntry
+  
+                  />
+                  </View>
+                  
+          <View style={styles.button}>
+                  <TouchableOpacity
+                      style={styles.signIn}
+                      onPress={handleSubmit}
+                      
+                  >
+                  
+                      <Text style={{color:'#fff'}}>Sign In</Text>
+  
+                  </TouchableOpacity>
+  
+            </View>
+           
+            <TouchableOpacity
+                      onPress={() => navigation.navigate("Register")}>
+            <Text style={{color: 'grey', marginTop:10}}>
+            Create an account? REGISTER NOW!
+            </Text>
+            </TouchableOpacity>
+          
+          </View>
+        
+  
+          
          
-          <TouchableOpacity
-                    onPress={() => navigation.navigate("Register")}>
-          <Text style={{color: 'grey', marginTop:10}}>
-          Create an account? Rigister
-          </Text>
-          </TouchableOpacity>
-        
-        </View>
-      
-
-        
-       
-        
-        </View>
-    );
-};
-
+          
+          </View>
+      )
+      }
+    </Formik>
+  
+      );
+  };
 export default Login;
 
 const styles = StyleSheet.create({

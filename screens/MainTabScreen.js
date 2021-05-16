@@ -3,15 +3,16 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
 import Homescreen from './Home';
-import Loginscreen from './Login';
 import Icon from 'react-native-vector-icons/Entypo';
+import Logout from './Logout';
+import Washlist from './Washlist';
+import seller from './seller';
 import About from './About';
-import wishlist from './wishlist';
-import Register from './Register';
 
 const HomeStack = createStackNavigator();
-const LoginStack = createStackNavigator();
-const WishlistStack = createStackNavigator();
+const SellerStack = createStackNavigator();
+const WashlistStack = createStackNavigator();
+const LogoutStack = createStackNavigator();
 const AboutStack = createStackNavigator();
 
 
@@ -34,10 +35,10 @@ const MainTabScreen =()=>(
       }}
     />
     <Tab.Screen
-      name="Wishlist"
-      component={WishlistStackScreen}
+      name="Washlist"
+      component={WashlistStackScreen}
       options={{
-        tabBarLabel: 'My Wishlist',
+        tabBarLabel: 'My Watchlist',
         tabBarColor: '#009387',
         tabBarIcon: ({ color }) => (
           <Icon name="add-to-list" color={color} size={26} />
@@ -45,10 +46,10 @@ const MainTabScreen =()=>(
       }}
     />
     <Tab.Screen
-      name="Profile"
-      component={LoginStackScreen}
+      name="Seller"
+      component={SellerStackScreen}
       options={{
-        tabBarLabel: 'Profile',
+        tabBarLabel: 'Seller',
         tabBarColor: '#009387',
         tabBarIcon: ({ color }) => (
           <Icon name="login" color={color} size={26} />
@@ -60,6 +61,17 @@ const MainTabScreen =()=>(
       component={AboutStackScreen}
       options={{
         tabBarLabel: 'About',
+        tabBarColor: '#009387',
+        tabBarIcon: ({ color }) => (
+          <Icon name="info-with-circle" color={color} size={26} />
+        ),
+      }}
+    />
+    <Tab.Screen
+      name="Logout"
+      component={LogoutStackScreen}
+      options={{
+        tabBarLabel: 'Logout',
         tabBarColor: '#009387',
         tabBarIcon: ({ color }) => (
           <Icon name="info-with-circle" color={color} size={26} />
@@ -84,17 +96,15 @@ const HomeStackScreen =  ({navigation})=>(
           }
         }>
           <HomeStack.Screen name="Home" component={Homescreen} options={{
-            headerLeft: ()=>(
-              <Icon.Button name="menu"  size={30}
-              backgroundColor= '#009387' onPress={()=>navigation.openDrawer()}></Icon.Button> 
-  )
+            headerLeft:null 
+  
           }}/>
         </HomeStack.Navigator> 
   );
   
   
-  const LoginStackScreen =  ({Navigation})=>(
-    <LoginStack.Navigator screenOptions={
+  const SellerStackScreen =  ({Navigation})=>(
+    <SellerStack.Navigator screenOptions={
           {
             headerStyle:{
               backgroundColor : '#009387'
@@ -105,11 +115,11 @@ const HomeStackScreen =  ({navigation})=>(
             }
           }
         }>
-          <LoginStack.Screen name="Login" component={Loginscreen} />
-        </LoginStack.Navigator> 
+          <SellerStack.Screen name="Seller" component={seller} />
+        </SellerStack.Navigator> 
   );
-  const WishlistStackScreen =  ({Navigation})=>(
-    <WishlistStack.Navigator screenOptions={
+  const WashlistStackScreen =  ({Navigation})=>(
+    <WashlistStack.Navigator screenOptions={
           {
             headerStyle:{
               backgroundColor : '#009387'
@@ -120,8 +130,8 @@ const HomeStackScreen =  ({navigation})=>(
             }
           }
         }>
-          <WishlistStack.Screen name="My Wishlist" component={wishlist} />
-        </WishlistStack.Navigator> 
+          <WashlistStack.Screen name="My Watchlist" component={Washlist} />
+        </WashlistStack.Navigator> 
   );
   const AboutStackScreen =  ({Navigation})=>(
     <AboutStack.Navigator screenOptions={
@@ -137,6 +147,24 @@ const HomeStackScreen =  ({navigation})=>(
         }>
           <AboutStack.Screen name="About" component={About} />
         </AboutStack.Navigator> 
+        
+  );
+
+ 
+  const LogoutStackScreen =  ({Navigation})=>(
+    <LogoutStack.Navigator screenOptions={
+          {
+            headerStyle:{
+              backgroundColor : '#009387'
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+              fontWeight:'bold'
+            }
+          }
+        }>
+          <LogoutStack.Screen name="Logout" component={Logout} />
+        </LogoutStack.Navigator> 
         
   );
 

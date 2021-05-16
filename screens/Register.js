@@ -1,11 +1,51 @@
 import React from 'react';
-import { View, Text, StyleSheet,TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet,TextInput, TouchableOpacity, Button } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-
-
+import axios from 'axios';
+import {Formik} from 'formik';
+axios.defaults.baseURL="https://ee7345651ad8.ngrok.io"
 const Register = ({navigation}) => {
 
+
+  const RegisterHandler = async ({username,email, password,confirmPassword}) => {
+      try {
+        const response = await axios.post('/register/', {
+          username,
+          email,
+          password,
+          confirmPassword
+        });
+        const responsestr=JSON.stringify(response);
+        console.log(responsestr)
+        navigation.navigate('Login');
+        if (responsestr) {
+          alert('User Registered Successfully!');
+        }
+      } catch (error) {
+        alert(error);
+      }
+}
     return (
+    
+         
+    <Formik
+    initialValues={{
+      username: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+    }}
+    onSubmit={(values, formikActions) => {
+      RegisterHandler(values);
+    }}>
+    {({
+      handleBlur,
+      handleChange,
+      handleSubmit,
+      values,
+
+    }) => (
+      
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.text_header}>Register Now !</Text>
@@ -17,7 +57,9 @@ const Register = ({navigation}) => {
                     size={20}
                 />
         <TextInput 
-                    
+                    value={values.username}
+                    onBlur={handleBlur('username')}
+                    onChangeText={handleChange('username')}
                     placeholder="Your Username"
                     placeholderTextColor="#666666"
                     style={styles.textInput}
@@ -32,12 +74,15 @@ const Register = ({navigation}) => {
                     size={20}
                 />
             <TextInput 
-                    
+                    value={values.email}
+                    onBlur={handleBlur('email')}
+                    onChangeText={handleChange('email')}
+                    keyboardType="email-address"
                     placeholder="Your Email"
                     placeholderTextColor="#666666"
                     style={styles.textInput}
                     autoCapitalize="none"
-                 
+                   
                 />
             </View>
             <View style={styles.action}>
@@ -50,13 +95,34 @@ const Register = ({navigation}) => {
                     placeholderTextColor="#666666"
                     style={styles.textInput}
                     autoCapitalize="none"
-                 
+                    value={values.password}
+                    onBlur={handleBlur('password')}
+                    onChangeText={handleChange('password')}
+                    secureTextEntry
+
+                />
+                </View>
+                <View style={styles.action}>
+            <FontAwesome 
+                    name="lock"
+                    size={20}
+                />
+                  <TextInput 
+                    placeholder="Confirm Password"
+                    placeholderTextColor="#666666"
+                    style={styles.textInput}
+                    autoCapitalize="none"
+                    value={values.confirmPassword}
+                    onBlur={handleBlur('confirmPassword')}
+                    onChangeText={handleChange('confirmPassword')}
+                    secureTextEntry
                 />
         </View>
         <View style={styles.button}>
                 <TouchableOpacity
                     style={styles.signIn}
-                    onPress={() => navigation.navigate("Login")}
+                    onPress={handleSubmit}
+                    
                 >
                 
                     <Text style={{color:'#fff'}}>Sign Up</Text>
@@ -79,6 +145,10 @@ const Register = ({navigation}) => {
        
         
         </View>
+    )
+    }
+  </Formik>
+
     );
 };
 
@@ -93,15 +163,15 @@ const styles = StyleSheet.create({
       flex: 1,
       justifyContent: 'flex-end',
       paddingHorizontal: 20,
-      paddingBottom: 50
+      paddingBottom: 20
   },
   footer: {
-      flex: 3,
+      flex: 7,
       backgroundColor: '#fff',
       borderTopLeftRadius: 30,
       borderTopRightRadius: 30,
       paddingHorizontal: 20,
-      paddingVertical: 30
+      paddingVertical: 10
   },
   text_header: {
       color: '#fff',
