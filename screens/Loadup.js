@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react'
 import { ImageBackground, View,Text, StyleSheet,Button } from 'react-native';
 const image = { uri: "https://papers.co/wallpaper/papers.co-nq33-space-galaxy-star-nature-dark-4-wallpaper.jpg" };
@@ -6,9 +7,11 @@ const image = { uri: "https://papers.co/wallpaper/papers.co-nq33-space-galaxy-st
 
 export default function Loadup({navigation}) {
 
-    const presshandlerOnload=()=>{
+    const presshandlerOnload=async()=>{
         navigation.navigate('Login')
-    }
+        console.log(await AsyncStorage.getItem("user_id",''))
+        console.log(await AsyncStorage.getItem("username",''))    }
+   
     
     return (
         <View style={styles.container}>

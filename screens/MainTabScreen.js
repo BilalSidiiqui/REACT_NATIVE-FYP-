@@ -4,10 +4,13 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 
 import Homescreen from './Home';
 import Icon from 'react-native-vector-icons/Entypo';
+import IconLogout from 'react-native-vector-icons/MaterialCommunityIcons';
+import IconAdd from 'react-native-vector-icons/Ionicons';
 import Logout from './Logout';
 import Washlist from './Washlist';
 import seller from './seller';
 import About from './About';
+
 
 const HomeStack = createStackNavigator();
 const SellerStack = createStackNavigator();
@@ -52,7 +55,7 @@ const MainTabScreen =()=>(
         tabBarLabel: 'Seller',
         tabBarColor: '#009387',
         tabBarIcon: ({ color }) => (
-          <Icon name="login" color={color} size={26} />
+          <IconAdd name="ios-add-circle-sharp" color={color} size={26} />
         ),
       }}
     />
@@ -74,7 +77,7 @@ const MainTabScreen =()=>(
         tabBarLabel: 'Logout',
         tabBarColor: '#009387',
         tabBarIcon: ({ color }) => (
-          <Icon name="info-with-circle" color={color} size={26} />
+          <IconLogout name="logout" color={color} size={26} />
         ),
       }}
     />
@@ -86,6 +89,7 @@ export default MainTabScreen;
 const HomeStackScreen =  ({navigation})=>(
     <HomeStack.Navigator screenOptions={
           {
+            headerShown:false,
             headerStyle:{
               backgroundColor : '#009387'
             },
@@ -135,7 +139,9 @@ const HomeStackScreen =  ({navigation})=>(
   );
   const AboutStackScreen =  ({Navigation})=>(
     <AboutStack.Navigator screenOptions={
+      
           {
+            headerShown:false,
             headerStyle:{
               backgroundColor : '#009387'
             },

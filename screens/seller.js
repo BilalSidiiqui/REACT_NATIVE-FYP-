@@ -5,13 +5,10 @@ import { View, Text, StyleSheet,TextInput, TouchableOpacity,Button } from 'react
 import {Picker} from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-axios.defaults.baseURL="https://ee7345651ad8.ngrok.io/"
+axios.defaults.baseURL="https://d6ac0b3d0345.ngrok.io"
 const seller = ({navigation}) =>{
 
-  const[category,setcategory]=useState('');
-  const [date, setDate] = useState(new Date());
-  const [mode, setMode] = useState('date');
-  const [show, setShow] = useState(false);
+ 
 
 
   const showMode = (currentMode) => {
@@ -29,7 +26,17 @@ const seller = ({navigation}) =>{
   };
 
   
-    const AddaProductHandler = async ({title,description, image,category,start_price,created_by}) => {
+  const[title,settitle]=useState('');
+  const[description,setdescription]=useState('');
+  const[category,setcategory]=useState('');
+  const[image,setimage]=useState('');
+  const[start_price,setstart_price]=useState('');
+  const[created_by,setcreated_by]=useState('');
+  const [date, setDate] = useState(new Date());
+  const [mode, setMode] = useState('date');
+  const [show, setShow] = useState(false);
+  
+    const AddaProductHandler = async () => {
         try {
           const response = await axios.post('/Listing/', {
             title,
@@ -37,7 +44,8 @@ const seller = ({navigation}) =>{
             image,
             category,
             start_price,  
-            created_by
+            
+            
           });
           const responsestr=JSON.stringify(response);
           navigation.navigate('Home');
@@ -52,25 +60,6 @@ const seller = ({navigation}) =>{
 console.log(date);
   return (
              
-    <Formik
-    initialValues={{
-        title: '',
-        description: '',
-        image: '',
-        category: '',
-        start_price: '',
-        created_by: '',
-    }}
-    onSubmit={(values, formikActions) => {
-      AddaProductHandler(values);
-    }}>
-    {({
-      handleBlur,
-      handleChange,
-      handleSubmit,
-      values,
-
-    }) => (
       
       <View style={styles.container}>
         <View style={styles.header}>
@@ -80,9 +69,8 @@ console.log(date);
         <View style={styles.action}> 
         
         <TextInput 
-                    value={values.title}
-                    onBlur={handleBlur('title')}
-                    onChangeText={handleChange('title')}
+                    value={title}
+                    onChangeText={t=>settitle(t)}
                     placeholder="Product title"
                     placeholderTextColor="#666666"
                     style={styles.textInput}
@@ -94,9 +82,8 @@ console.log(date);
             <View style={styles.action}>
            
             <TextInput 
-                    value={values.description}
-                    onBlur={handleBlur('description')}
-                    onChangeText={handleChange('description')}
+                 value={description}
+                 onChangeText={t=>setdescription(t)}
                     placeholder=" Write description"
                     placeholderTextColor="#666666"
                     style={styles.textInput}
@@ -111,9 +98,8 @@ console.log(date);
                     placeholderTextColor="#666666"
                     style={styles.textInput}
                     autoCapitalize="none"
-                    value={values.image}
-                    onBlur={handleBlur('image')}
-                    onChangeText={handleChange('image')}
+                    value={image}
+                    onChangeText={t=>setimage(t)}
 
                 />
                 </View>
@@ -122,7 +108,7 @@ console.log(date);
           <Picker
 
                     style={{width:'80%'}}
-                    selectedValue={values.category}
+                    selectedValue={category}
                     onValueChange={(itemvalue)=> setcategory(itemvalue)}
                       >
                     <Picker.Item label="EDUCATION" value="E"/>
@@ -139,15 +125,14 @@ console.log(date);
                     placeholderTextColor="#666666"
                     style={styles.textInput}
                     autoCapitalize="none"
-                    value={values.start_price}
-                    onBlur={handleBlur('start_price')}
-                    onChangeText={handleChange('start_price')}
+                    value={start_price}
+                    onChangeText={t=>setstart_price(t)}
                     keyboardType='numeric'
                 />
         </View>
           <View>
           <View>
-        <Button onPress={showDatepicker} title="Show date picker!" />
+        <Button onPress={showDatepicker} title="Enter End Date!" />
       </View>
           {show && (
         <DateTimePicker
@@ -164,7 +149,7 @@ console.log(date);
         <View style={styles.button}>
                 <TouchableOpacity
                     style={styles.signIn}
-                    onPress={handleSubmit}
+                    onPress={AddaProductHandler}
                     
                 >
                 
@@ -182,10 +167,7 @@ console.log(date);
         
         </View>
     )
-    }
-  </Formik>
-
-    );
+ 
 };
 export default seller;
 

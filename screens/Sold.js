@@ -4,16 +4,16 @@ import {View, Image, FlatList,Text,StyleSheet, Button} from 'react-native';
 import {useNavigation} from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const Products=()=> {
+const Sold=()=> {
 
-  const[product,setproduct]=useState([]);
+  const[sold,setsold]=useState([]);
   
 
   useEffect(()=>{
-axios.get('https://d6ac0b3d0345.ngrok.io/Listing/').then(resp =>{
-  setproduct(resp.data)
-  let array= resp.data.filter( e => e.completed===false)
-    setproduct(array)
+axios.get('https://2af8e34919ee.ngrok.io/Listing/').then(resp =>{
+  setsold(resp.data)
+  let array= response.data.filter( e => e.completed===true)
+    setsold(array)
   show()
 });
   },[])
@@ -37,7 +37,7 @@ const renderItem = ({item}) => {
         <Text > TITLE: {item.title}</Text>
         <Text > DESCRIPTION: {item.description}</Text>
         <Text > STARTING PRICE: ${item.start_price}</Text>
-        <Button title='Buy Now' onPress={()=>navigation.navigate('ProductDetails',{item})} />
+        <Button title='Buy Now' onPress={()=>navigation.navigate('Aftersold',{item})} />
         
       </View>
     );
@@ -48,7 +48,7 @@ const renderItem = ({item}) => {
     return (
       <View style={styles.container}>
          <FlatList style={styles}
-        data={product} 
+        data={sold} 
         renderItem={renderItem} />
 
       </View>
@@ -71,4 +71,4 @@ ietm:{
     fontSize:15
 }
 })
-export default Products;
+export default Sold;

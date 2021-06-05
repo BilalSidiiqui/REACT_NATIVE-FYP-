@@ -8,8 +8,8 @@ import {useNavigation} from '@react-navigation/native'
     const navigation=useNavigation()
     const[product,setproduct]=useState([]);
     const[filterproduct,setfilterproduct]=useState([]);
-    const url=`https://ee7345651ad8.ngrok.io/Watchlist/?user=`
-    const filterurl='https://ee7345651ad8.ngrok.io/Listing/'
+    const url=`https://d6ac0b3d0345.ngrok.io/Watchlist/?user=`
+    const filterurl='https://d6ac0b3d0345.ngrok.io/Listing/'
     
     
     const Loginget=async()=>{

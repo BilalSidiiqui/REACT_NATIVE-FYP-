@@ -10,6 +10,8 @@ import seller from "./seller";
 import Watchlist from './Washlist'
 import Logout from './Logout'
 import MainTabScreen from "./MainTabScreen";
+import Sold from './Sold';
+import Aftersold from './Aftersold'
 
 const Stack = createStackNavigator();
 
@@ -28,8 +30,16 @@ const MainStackNavigator = () => {
        backgroundColor: '#009387'
      },
     headerTintColor:'#fff'
-            }}
-     />
+            }} />
+           <Stack.Screen name="Sold" component={Sold} options={{headerShown: false }}/>
+       <Stack.Screen name="Aftersold" component={Aftersold} options={{headerShown: true,
+     title: 'SOLD DETAIL',
+     headerStyle:{
+       backgroundColor: '#009387'
+     },
+    headerTintColor:'#fff'
+            }} />
+    
 
    </Stack.Navigator>
   );
