@@ -44,9 +44,9 @@ const Login = ({navigation}) => {
       }}
       validationSchema={Yup.object({
         username: Yup.string()
-          .required('Required')
+          .required('Username is Required')
           .matches(/^[a-zA-Z]/, 'Username Should Only Contains Letters'),
-        password: Yup.string().required('Required'),
+        password: Yup.string().required('Password is Required'),
       })}
       onSubmit={(values, formikActions) => {
         LoginHandler(values);
@@ -68,9 +68,15 @@ const Login = ({navigation}) => {
                 style={styles.textInput}
                 autoCapitalize="none"
               />
-  {errors.username ? <Text>{errors.username}</Text>:null}
-            </View>
-
+  </View>
+  {errors.username ? 
+  (
+    <View>
+  <Text style={styles.error}>{errors.username}</Text>
+  </View>
+  ):null}
+  
+ 
             <View style={styles.action}>
               <FontAwesome name="lock" size={20} />
               <TextInput
@@ -83,9 +89,9 @@ const Login = ({navigation}) => {
                 onChangeText={handleChange('password')}
                 secureTextEntry
               />
-      {errors.password ? <Text>{errors.password}</Text>:null}
+    
             </View>
-
+            {errors.password ? <Text style={styles.error}>{errors.password}</Text>:null}
             <View style={styles.button}>
               <TouchableOpacity style={styles.signIn} onPress={handleSubmit}>
                 <Text style={{color: '#fff'}}>Sign In</Text>
@@ -146,6 +152,7 @@ const styles = StyleSheet.create({
   },
   action: {
     flexDirection: 'row',
+    alignItems:'center',
     marginTop: 40,
     borderBottomWidth: 1,
     borderBottomColor: '#f2f2f2',
@@ -158,4 +165,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 10,
   },
+  error:{
+  color:'red'
+  }
 });
