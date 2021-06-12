@@ -17,24 +17,26 @@ axios.defaults.baseURL = 'https://d6ac0b3d0345.ngrok.io/';
 
 const Login = ({navigation}) => {
   const LoginHandler = async ({username, password}) => {
-    try {
-      const response = await axios.post('/login/', {
-        username,
-        password,
-      });
+    // try {
+    //   const response = await axios.post('/login/', {
+    //     username,
+    //     password,
+    //   });
 
-      const responsestr = response.data;
-      console.log(responsestr.user_id);
-      console.log(responsestr.username);
-      if (responsestr) {
-        await AsyncStorage.setItem('user_id', responsestr.user_id + '');
-        await AsyncStorage.setItem('username', responsestr.username);
-        alert('User Login Successfully!');
-        navigation.navigate('Home');
-      }
-    } catch (error) {
-      alert(error?.response?.data?.message || error?.message);
-    }
+    //   const responsestr = response.data;
+    //   console.log(responsestr.user_id);
+    //   console.log(responsestr.username);
+    //   if (responsestr) {
+    //     await AsyncStorage.setItem('user_id', responsestr.user_id + '');
+    //     await AsyncStorage.setItem('username', responsestr.username);
+    //     alert('User Login Successfully!');
+    //     navigation.navigate('Home');
+    //   }
+    // } catch (error) {
+    //   alert(error?.response?.data?.message || error?.message);
+    // }
+      navigation.navigate('Home');
+   
   };
   return (
     <Formik

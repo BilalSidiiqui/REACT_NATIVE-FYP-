@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-
+import Policies from "./Policies"
 import Homescreen from './Home';
 import Icon from 'react-native-vector-icons/Entypo';
 import IconLogout from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -10,8 +10,8 @@ import Logout from './Logout';
 import Washlist from './Washlist';
 import seller from './seller';
 import About from './About';
-
-
+import { View,Text, TouchableOpacity } from 'react-native'
+import SideMenu from "../screens/Component/sideMenu"
 const HomeStack = createStackNavigator();
 const SellerStack = createStackNavigator();
 const WashlistStack = createStackNavigator();
@@ -21,7 +21,7 @@ const AboutStack = createStackNavigator();
 
 const Tab = createMaterialBottomTabNavigator();
 
-const MainTabScreen =()=>(
+const BottomTabScreen =()=>(
     <Tab.Navigator
     initialRouteName="Home"
     activeColor="#fff"
@@ -85,6 +85,21 @@ const MainTabScreen =()=>(
   </Tab.Navigator>
 
 );
+
+import { createDrawerNavigator } from '@react-navigation/drawer';
+const Drawer = createDrawerNavigator();
+const MainTabScreen =()=>(
+<Drawer.Navigator initialRouteName="Home"  
+drawerType={'slide'}
+    drawerContent={(props) => (
+    <SideMenu {...props}></SideMenu>)}
+    headerMode="none">
+<Drawer.Screen name="Home" component={BottomTabScreen} />
+</Drawer.Navigator>
+
+)
+
+
 export default MainTabScreen;
 const HomeStackScreen =  ({navigation})=>(
     <HomeStack.Navigator screenOptions={
@@ -103,6 +118,20 @@ const HomeStackScreen =  ({navigation})=>(
             headerLeft:null 
   
           }}/>
+          <HomeStack.Screen
+        name="Policies"
+        component={Policies}
+        options={{
+          headerShown: false,
+        }}
+      />
+     <HomeStack.Screen
+        name="About"
+        component={About}
+        options={{
+          headerShown: false,
+        }}
+      />
         </HomeStack.Navigator> 
   );
   

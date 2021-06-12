@@ -6,11 +6,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const Logout = ({navigation}) => {
   
   const removeid=async()=>{ 
-     await AsyncStorage.clear("user_id",'');
-     await AsyncStorage.clear("username",'');
+     await AsyncStorage.clear()
 
-     console.log(await AsyncStorage.getItem("user_id",''))
-     console.log(await AsyncStorage.getItem("username",''))
 
     }
     navigation.dispatch(
