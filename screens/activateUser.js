@@ -1,7 +1,7 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
-import {Formik} from 'formik';
+import {Form, Formik} from 'formik';
 import * as Yup from 'yup';
 import {
   View,
@@ -10,114 +10,98 @@ import {
   TextInput,
   TouchableOpacity,
   Button,
-  ActivityIndicator,
 } from 'react-native';
-import {login} from './redux/action/authaction';
-import {useDispatch, useSelector} from 'react-redux';
-import {useIsFocused} from '@react-navigation/native';
 
-const Login = ({navigation}) => {
-  const dispatch = useDispatch();
-  const isFocused = useIsFocused();
-  const auth = useSelector(state => state.auth);
+import {URL} from './utils/constant';
 
-  const LoginHandler = async ({username, password}) => {
+const ActivateUser = ({navigation}) => {
+ 
+  const LoginHandler = async ({uid, token}) => {
     const data = {
-      username: username,
-      password: password,
+      uid: uid,
+      token: token,
     };
-    dispatch(login(data));
-  };
-  useEffect(() => {
-    if (isFocused && auth.success) {
-      navigation.replace('Home');
-      console.log(auth);
+    var form = new FormData();
+    form.append('uid', data.uid);
+    form.append('token', data.token);
+    try {
+      axios
+        .post(URL.Url + 'activate/',form)
+        .then(res => {
+          console.log(res.data);
+        navigation.navigate('Login')
+           })
+        .catch(error => {
+          console.log(error);
+        });
+    } catch (error) {
+      alert(error?.response?.data?.message || error?.message);
     }
-  }, [auth]);
-console.log(auth.loading);
+  };
   return (
     <Formik
       initialValues={{
-        username: '',
-        password: '',
+        uid: '',
+        token: '',
       }}
       validationSchema={Yup.object({
-        username: Yup.string()
-          .required('Username is Required')
-          .matches(/^[a-zA-Z]/, 'Username Should Only Contains Letters'),
-        password: Yup.string().required('Password is Required'),
+        uid: Yup.string().required('User ID is Required'),
+        token: Yup.string().required('Token is Required'),
       })}
       onSubmit={(values, formikActions) => {
         LoginHandler(values);
-        formikActions.resetForm()
       }}>
       {({handleBlur, handleChange, handleSubmit, values, errors}) => (
         <View style={styles.container}>
           <View style={styles.header}>
-            <Text style={styles.text_header}>Login Now !</Text>
+            <Text style={styles.text_header}>Verify Now !</Text>
           </View>
           <View style={styles.footer}>
             <View style={styles.action}>
               <FontAwesome name="user-o" size={20} />
               <TextInput
                 value={values.username}
-                onBlur={handleBlur('username')}
-                onChangeText={handleChange('username')}
-                placeholder="Your Username"
+                onBlur={handleBlur('uid')}
+                onChangeText={handleChange('uid')}
+                placeholder="Your User ID"
                 placeholderTextColor="#666666"
                 style={styles.textInput}
                 autoCapitalize="none"
               />
             </View>
-            {errors.username ? (
+            {errors.uid ? (
               <View>
-                <Text style={styles.error}>{errors.username}</Text>
+                <Text style={styles.error}>{errors.uid}</Text>
               </View>
             ) : null}
 
             <View style={styles.action}>
               <FontAwesome name="lock" size={20} />
               <TextInput
-                placeholder="Your Password"
+                placeholder="Your Token"
                 placeholderTextColor="#666666"
                 style={styles.textInput}
                 autoCapitalize="none"
-                value={values.password}
-                onBlur={handleBlur('password')}
-                onChangeText={handleChange('password')}
-                secureTextEntry
+                value={values.token}
+                onBlur={handleBlur('token')}
+                onChangeText={handleChange('token')}
               />
             </View>
-            {errors.password ? (
-              <Text style={styles.error}>{errors.password}</Text>
+            {errors.token ? (
+              <Text style={styles.error}>{errors.token}</Text>
             ) : null}
-            {auth.loading ? (
-                 <View style={styles.button}>
-                 <TouchableOpacity style={styles.signIn} >
-                 <ActivityIndicator color={'white'} size={30} />
-            
-                 </TouchableOpacity>
-               </View>
-           
-            ) : (
-              <View style={styles.button}>
-                <TouchableOpacity style={styles.signIn} onPress={handleSubmit}>
-                  <Text style={{color: '#fff'}}>Sign In</Text>
-                </TouchableOpacity>
-              </View>
-            )}
-            <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-              <Text style={{color: 'grey', marginTop: 10}}>
-                Create an account? REGISTER NOW!
-              </Text>
-            </TouchableOpacity>
+            <View style={styles.button}>
+              <TouchableOpacity style={styles.signIn} onPress={handleSubmit}>
+                <Text style={{color: '#fff'}}>Verify Now</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       )}
     </Formik>
   );
 };
-export default Login;
+export default ActivateUser;
 
 const styles = StyleSheet.create({
   container: {

@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useIsFocused} from '@react-navigation/native';
 import axios from 'axios';
 import React, {useState, useEffect} from 'react';
 import {
@@ -12,38 +13,50 @@ import {
   Button,
 } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import {useSelector} from 'react-redux';
+import {URL} from './utils/constant';
 
 const Productdetails = props => {
+  const auth = useSelector(state => state.auth);
   const [comment, setcomment] = useState([]);
   const [bid, setBid] = useState([]);
   const [bidPrice, setBidPrice] = useState('');
-  console.log(comment);
-  const url = `https://d6ac0b3d0345.ngrok.io/Comment/?listing=${props?.route?.params?.item.id}`;
+  const [msg, setMsg] = useState('');
+  const isFocused = useIsFocused();
+  const [show, setShow] = useState('');
 
-  const Bidurl = `https://d6ac0b3d0345.ngrok.io/Bid/?listing=${props?.route?.params?.item.id}`;
+  const url = URL.Url + `?listing=${props?.route?.params?.item}`;
+
+  const Bidurl = URL.Url + `?listing=${props?.route?.params?.item.id}`;
 
   useEffect(() => {
-    axios.get(url).then(response => {
-      setcomment(response.data);
-    });
-    axios.get(Bidurl).then(resp => {
-      setBid(resp.data);
-    });
-  }, [url]);
+    if (isFocused) {
+      axios.get(url).then(res => {
+        axios.get(res.data.Comment).then(response => {
+          setcomment(response.data);
+          // console.log('Comment', response.data);
+        });
+      });
+      axios.get(Bidurl).then(res => {
+        axios.get(res.data.Bid).then(response => {
+          setBid(response.data);
+          // console.log('Bid*******', response.data);
+        });
+      });
+    }
+  }, [isFocused]);
 
   const CommentHandler = async () => {
-    console.log('--------->', comment, props?.route?.params?.item.id);
+    // console.log('-----User data---->', auth);
     try {
-      let user = await AsyncStorage.getItem('user_id');
-      console.log(user);
       var data = new FormData();
-      data.append('listing', '1');
-      data.append('user', '2');
-      data.append('comment', 'dhasjdhjashdjadhs');
+      data.append('listing', props?.route?.params?.item.id);
+      data.append('user', auth.user.user_id);
+      data.append('comment', msg);
 
       var config = {
         method: 'post',
-        url: 'https://d6ac0b3d0345.ngrok.io/Comment/',
+        url: URL.Url + 'Comment/',
 
         data: data,
       };
@@ -64,15 +77,15 @@ const Productdetails = props => {
       try {
         let user = await AsyncStorage.getItem('user_id');
         const formBody = new FormData();
-        formBody.append('user', user);
+        formBody.append('user', auth.user.user_id);
         formBody.append('listing', props?.route?.params?.item.id);
         formBody.append('bid_price', bidPrice);
-        const response=await axios.post('https://3e7be5e1aae7.ngrok.io/Bid/',formBody)
-        if(response){
-          alert('Bid Placed')
+        const response = await axios.post(URL.Url + 'Bid/', formBody);
+        if (response) {
+          alert('Bid Placed');
         }
       } catch (error) {
-        alert(error?.message)
+        alert(error?.message);
       }
     } else alert('Invalid Bid');
   };
@@ -87,8 +100,8 @@ const Productdetails = props => {
           marginBottom: 10,
           backgroundColor: '#C0C0C0',
         }}>
-        <Text style={{fontSize: 15}}> User: {item.username}</Text>
-        <Text style={{marginLeft: 25, fontSize: 15}}>" {item.comment} "</Text>
+        <Text style={{fontSize: 15, color: 'blue'}}> {item.username} :</Text>
+        <Text style={{marginLeft: 25, fontSize: 15}}>{item.comment} </Text>
       </View>
     );
   };
@@ -102,19 +115,19 @@ const Productdetails = props => {
           padding: 10,
           marginBottom: 10,
           backgroundColor: '#C0C0C0',
+          alignItems: 'center',
+          justifyContent: 'space-between',
         }}>
-        <Text style={{alignSelf: 'center'}}> COMMENTS</Text>
-        <Text style={{fontSize: 15}}> User: {item?.username}</Text>
-        <Text style={{marginLeft: 25, fontSize: 15}}>
-          {' '}
-          Price: ${item?.bid_price}
-        </Text>
+        <View>
+          <Text>Username: {item.username}</Text>
+        </View>
+        <Text> Price: {item.bid_price} $</Text>
       </View>
     );
   };
 
   return (
-    <View style={{backgroundColor: '#DCDCDC'}}>
+    <View style={{flex: 1, backgroundColor: '#DCDCDC', paddingHorizontal: 10}}>
       <ScrollView>
         <View>
           <Image
@@ -141,18 +154,120 @@ const Productdetails = props => {
             {' '}
             BID END AT: {props?.route?.params?.item?.end_date}
           </Text>
-          <Text
+        </View>
+        <View
+          style={{
+            backgroundColor: 'white',
+            width: '100%',
+            marginVertical: 10,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            borderRadius: 10,
+          }}>
+          <TouchableOpacity
+            onPress={() => setShow(!show)}
             style={{
-              alignSelf: 'center',
-              fontSize: 20,
-              fontWeight: 'bold',
-              marginTop: 30,
+              width: '50%',
+              backgroundColor: show ? 'white' : 'gray',
+              paddingVertical: 15,
+              borderTopLeftRadius: 10,
+              borderBottomLeftRadius: 10,
+              justifyContent: 'center',
+              alignItems: 'center',
             }}>
-            {' '}
-            COMMENTS
-          </Text>
+            <Text style={{fontSize: 20, color: show ? 'blue' : 'white'}}>
+              {' '}
+              Comments
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setShow(!show)}
+            style={{
+              width: '50%',
+              backgroundColor: show ? 'gray' : 'white',
+              paddingVertical: 15,
+              borderTopRightRadius: 10,
+              borderBottomRightRadius: 10,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Text style={{fontSize: 20, color: show ? 'white' : 'blue'}}>
+              {' '}
+              Bids
+            </Text>
+          </TouchableOpacity>
         </View>
 
+        {!show ? (
+          <>
+            <View
+              style={{
+                marginVertical: 10,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <TextInput
+                onChangeText={text => {
+                  setMsg(text);
+                }}
+                style={{
+                  backgroundColor: 'white',
+                  borderRadius: 10,
+                  width: '82%',
+                }}
+                placeholder={'Type your Comment'}
+              />
+              <TouchableOpacity
+                onPress={CommentHandler}
+                style={{
+                  backgroundColor: 'white',
+                  borderRadius: 10,
+                  justifyContent: 'center',
+                  width: '15%',
+                  alignItems: 'center',
+                  paddingVertical: 15,
+                }}>
+                <Text style={{color: 'blue'}}>Post</Text>
+              </TouchableOpacity>
+            </View>
+            <FlatList data={comment} renderItem={item => renderItem(item)} />
+          </>
+        ) : (
+          <>
+            <View
+              style={{
+                marginVertical: 10,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <TextInput
+                style={{
+                  backgroundColor: 'white',
+                  borderRadius: 10,
+                  width: '82%',
+                }}
+                onChangeText={t => setBidPrice(t)}
+                placeholder={'Type your Bid'}
+              />
+              <TouchableOpacity
+                onPress={postBid}
+                style={{
+                  backgroundColor: 'white',
+                  borderRadius: 10,
+                  justifyContent: 'center',
+                  width: '15%',
+                  alignItems: 'center',
+                  paddingVertical: 15,
+                }}>
+                <Text style={{color: 'blue'}}>Post</Text>
+              </TouchableOpacity>
+            </View>
+            <FlatList data={bid} renderItem={item => renderItemBid(item)} />
+          </>
+        )}
+        {/* 
         <View
           style={{
             borderWidth: 1,
@@ -238,7 +353,7 @@ const Productdetails = props => {
           <View>
            <Button title="add" onPress={postBid} />
         </View>
-        </View>
+        </View> */}
       </ScrollView>
     </View>
   );

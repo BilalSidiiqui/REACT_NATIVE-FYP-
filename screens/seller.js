@@ -13,6 +13,7 @@ import {
 import {Picker} from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import { URL } from './utils/constant';
 axios.defaults.baseURL = 'https://d6ac0b3d0345.ngrok.io';
 const seller = ({navigation}) => {
   const showMode = currentMode => {
@@ -41,7 +42,7 @@ const seller = ({navigation}) => {
 
   const AddaProductHandler = async () => {
     try {
-      const response = await axios.post('/Listing/', {
+      const response = await axios.post(URL.Url+'Listing/', {
         title,
         description,
         image,
@@ -55,6 +56,7 @@ const seller = ({navigation}) => {
       }
     } catch (error) {
       alert(error);
+      console.log(error);
     }
   };
   const openGallery = () => {

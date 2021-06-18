@@ -12,6 +12,7 @@ import Logout from './Logout';
 import MainTabScreen from './MainTabScreen';
 import Sold from './Sold';
 import Aftersold from './Aftersold';
+import ActiveUser from './activateUser';
 const Stack = createStackNavigator();
 
 const MainStackNavigator = () => {
@@ -25,6 +26,11 @@ const MainStackNavigator = () => {
       <Stack.Screen
         name="Login"
         component={Login}
+        options={{headerShown: false}}
+      />
+            <Stack.Screen
+        name="ActiveUser"
+        component={ActiveUser}
         options={{headerShown: false}}
       />
       <Stack.Screen
