@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import axios from 'axios';
-import {Formik} from 'formik';
+import {Form, Formik} from 'formik';
 import {
   View,
   Text,
@@ -9,18 +9,29 @@ import {
   TouchableOpacity,
   Button,
   Alert,
+  ScrollView,
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import { URL } from './utils/constant';
+import {URL} from './utils/constant';
+import {useSelector} from 'react-redux';
 axios.defaults.baseURL = 'https://d6ac0b3d0345.ngrok.io';
 const seller = ({navigation}) => {
+  const auth = useSelector(state => state.auth);
+  const [title, settitle] = useState('');
+  const [description, setdescription] = useState('');
+  const [category, setcategory] = useState('');
+  const [image, setimage] = useState('');
+  const [start_price, setstart_price] = useState(0);
+  const [created_by, setcreated_by] = useState('');
+  const [date, setDate] = useState(new Date());
+  const [mode, setMode] = useState('date');
+  const [show, setShow] = useState(false);
   const showMode = currentMode => {
     setShow(true);
     setMode(currentMode);
   };
-
   const showDatepicker = () => {
     showMode('date');
   };
@@ -29,26 +40,24 @@ const seller = ({navigation}) => {
     setShow(Platform.OS === 'ios');
     setDate(currentDate);
   };
-
-  const [title, settitle] = useState('');
-  const [description, setdescription] = useState('');
-  const [category, setcategory] = useState('');
-  const [image, setimage] = useState('');
-  const [start_price, setstart_price] = useState('');
-  const [created_by, setcreated_by] = useState('');
-  const [date, setDate] = useState(new Date());
-  const [mode, setMode] = useState('date');
-  const [show, setShow] = useState(false);
-
   const AddaProductHandler = async () => {
+    const formdata = new FormData();
+    formdata.append('title', title);
+    formdata.append('description', description);
+    formdata.append('category', category);
+    formdata.append('start_price', start_price);
+    formdata.append('created_by', auth.user.user_id);
+    formdata.append('end_date', JSON.stringify(date));
+    // formdata.append('image',
+    //  {
+    //   uri: image.uri,
+    //   type: 'image/jpeg',
+    //   name: 'image.jpg',
+    // }
+    // );
+    console.log(formdata);
     try {
-      const response = await axios.post(URL.Url+'Listing/', {
-        title,
-        description,
-        image,
-        category,
-        start_price,
-      });
+      const response = await axios.post(URL.Url + 'Listing/', formdata);
       const responsestr = JSON.stringify(response);
       navigation.navigate('Home');
       if (responsestr) {
@@ -71,7 +80,9 @@ const seller = ({navigation}) => {
       storageOptions: {
         skipBackup: true,
         path: 'images',
+        includeBase64: true,
       },
+      includeBase64: true,
     };
     Alert.alert(
       'Upload Image',
@@ -94,7 +105,7 @@ const seller = ({navigation}) => {
                 );
                 alert(response.customButton);
               } else {
-                console.log('Ok');
+                setimage(response.assets[0]);
               }
             });
           },
@@ -115,7 +126,8 @@ const seller = ({navigation}) => {
                 );
                 alert(response.customButton);
               } else {
-                console.log('Ok');
+                setimage(response.assets[0]);
+                // console.log(response.assets[0]);
               }
             });
           },
@@ -125,94 +137,97 @@ const seller = ({navigation}) => {
     );
   };
 
-  console.log(date);
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.text_header}>Add your product</Text>
-      </View>
-      <View style={styles.footer}>
-        <View style={styles.action}>
-          <TextInput
-            value={title}
-            onChangeText={t => settitle(t)}
-            placeholder="Product title"
-            placeholderTextColor="#666666"
-            style={styles.textInput}
-            autoCapitalize="none"
-          />
+      <ScrollView>
+        <View style={styles.header}>
+          <Text style={styles.text_header}>Add your product</Text>
         </View>
-        <View style={styles.action}>
-          <TextInput
-            value={description}
-            onChangeText={t => setdescription(t)}
-            placeholder=" Write description"
-            placeholderTextColor="#666666"
-            style={styles.textInput}
-            autoCapitalize="none"
-          />
-        </View>
-        <View style={styles.action}>
-          <TouchableOpacity
-            onPress={openGallery}
-            style={{
-              backgroundColor: 'green',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: 8,
-              borderRadius: 10,
-              marginLeft: 30,
-            }}>
-            <Text style={{textAlign: 'center', color: 'white'}}>
-              Choose Image
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.actionPicker}>
-          <Picker
-            style={{width: '80%'}}
-            selectedValue={category}
-            onValueChange={itemvalue => setcategory(itemvalue)}>
-            <Picker.Item label="EDUCATION" value="E" />
-            <Picker.Item label="HOME" value="H" />
-            <Picker.Item label="TOY" value="T" />
-          </Picker>
-        </View>
-
-        <View style={styles.action}>
-          <TextInput
-            placeholder="Enter starting price"
-            placeholderTextColor="#666666"
-            style={styles.textInput}
-            autoCapitalize="none"
-            value={start_price}
-            onChangeText={t => setstart_price(t)}
-            keyboardType="numeric"
-          />
-        </View>
-        <View>
-          <View>
-            <Button onPress={showDatepicker} title="Enter End Date!" />
-          </View>
-          {show && (
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={date}
-              mode={mode}
-              is24Hour={true}
-              display="default"
-              onChange={onChange}
+        <View style={styles.footer}>
+          <View style={styles.action}>
+            <TextInput
+              value={title}
+              onChangeText={t => settitle(t)}
+              placeholder="Product title"
+              placeholderTextColor="#666666"
+              style={styles.textInput}
+              autoCapitalize="none"
             />
-          )}
-        </View>
+          </View>
+          <View style={styles.action}>
+            <TextInput
+              value={description}
+              onChangeText={t => setdescription(t)}
+              placeholder=" Write description"
+              placeholderTextColor="#666666"
+              style={styles.textInput}
+              autoCapitalize="none"
+            />
+          </View>
+          <View style={styles.action}>
+            <TouchableOpacity
+              onPress={openGallery}
+              style={{
+                backgroundColor: 'green',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: 8,
+                borderRadius: 10,
+                marginLeft: 30,
+              }}>
+              <Text style={{textAlign: 'center', color: 'white'}}>
+                Choose Image
+              </Text>
+            </TouchableOpacity>
+          </View>
 
-        <View style={styles.button}>
-          <TouchableOpacity style={styles.signIn} onPress={AddaProductHandler}>
-            <Text style={{color: '#fff'}}>ADD PRODUCT</Text>
-          </TouchableOpacity>
+          <View style={styles.actionPicker}>
+            <Picker
+              style={{width: '80%'}}
+              selectedValue={category}
+              onValueChange={itemvalue => setcategory(itemvalue)}>
+              <Picker.Item label="EDUCATION" value="E" />
+              <Picker.Item label="HOME" value="H" />
+              <Picker.Item label="TOY" value="T" />
+            </Picker>
+          </View>
+
+          <View style={styles.action}>
+            <TextInput
+              placeholder="Enter starting price"
+              placeholderTextColor="#666666"
+              style={styles.textInput}
+              autoCapitalize="none"
+              value={start_price}
+              onChangeText={t => setstart_price(t)}
+              keyboardType="numeric"
+            />
+          </View>
+          <View>
+            <View>
+              <Button onPress={showDatepicker} title="Enter End Date!" />
+            </View>
+            {show && (
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={date}
+                mode={mode}
+                is24Hour={true}
+                display="default"
+                onChange={onChange}
+              />
+            )}
+          </View>
+
+          <View style={styles.button}>
+            <TouchableOpacity
+              style={styles.signIn}
+              onPress={AddaProductHandler}>
+              <Text style={{color: '#fff'}}>ADD PRODUCT</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 };

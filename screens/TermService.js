@@ -1,13 +1,28 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react'
-import { View, Text, StyleSheet,TextInput, TouchableOpacity,Button } from 'react-native';
+import { View, Text, StyleSheet,TextInput,Image, TouchableOpacity,Button } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
- function TermService() {
+ function TermService({navigation}) {
 
     return (
         <View style={styles.container}>
         <View style={styles.header}>
+        <TouchableOpacity
+            style={{paddingRight: 10}}
+            onPress={() => {
+              navigation.navigate('Home');
+            }}>
+            <Image
+              source={require('./images/arrow.png')}
+              style={{
+                height: 30,
+                width: 30,
+                resizeMode: 'contain',
+                tintColor: 'white',
+              }}></Image>
+          </TouchableOpacity>
+     
           <Text style={styles.text_header}>TERMS OF SERVICE</Text>
         </View>
         <View style={styles.footer}> 

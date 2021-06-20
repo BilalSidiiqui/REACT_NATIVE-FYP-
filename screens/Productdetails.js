@@ -53,16 +53,13 @@ const Productdetails = props => {
       data.append('listing', props?.route?.params?.item.id);
       data.append('user', auth.user.user_id);
       data.append('comment', msg);
-
       var config = {
         method: 'post',
         url: URL.Url + 'Comment/',
-
         data: data,
       };
 
       const response = await axios(config);
-
       if (response) {
         alert('Comment Posted Successfully!');
       }
@@ -75,17 +72,22 @@ const Productdetails = props => {
   const postBid = async () => {
     if (/^\d+$/.test(bidPrice) && bidPrice.length > 0) {
       try {
-        let user = await AsyncStorage.getItem('user_id');
-        const formBody = new FormData();
-        formBody.append('user', auth.user.user_id);
-        formBody.append('listing', props?.route?.params?.item.id);
-        formBody.append('bid_price', bidPrice);
-        const response = await axios.post(URL.Url + 'Bid/', formBody);
+        var data = new FormData();
+        data.append('listing', props?.route?.params?.item.id);
+        data.append('user', auth.user.user_id);
+        data.append('bid_price', bidPrice);
+        console.log(data);
+        var config = {
+          method: 'post',
+          url: URL.Url + 'Bid/',
+          data: data,
+        };
+        const response = await axios(config);
         if (response) {
-          alert('Bid Placed');
+          alert('Bid Posted Successfully!');
         }
       } catch (error) {
-        alert(error?.message);
+        alert('Bid price greater than your last bid!');
       }
     } else alert('Invalid Bid');
   };
@@ -267,93 +269,6 @@ const Productdetails = props => {
             <FlatList data={bid} renderItem={item => renderItemBid(item)} />
           </>
         )}
-        {/* 
-        <View
-          style={{
-            borderWidth: 1,
-            borderColor: 'black',
-            backgroundColor: '#fff',
-            marginBottom: 20,
-          }}>
-          <FlatList data={comment} renderItem={renderItem} />
-        </View>
-
-        <View
-          style={{
-            flexDirection: 'row',
-            marginTop: 13,
-            marginBottom: 30,
-            borderWidth: 2,
-            borderBottomColor: 'black',
-            width: 270,
-            backgroundColor: 'white',
-            paddingBottom: 3,
-          }}>
-          <FontAwesome
-            name="comment"
-            size={20}
-            style={{marginRight: 20, marginTop: 14}}
-          />
-          <TextInput
-            value={comment}
-            onChangeText={t => setcomment(t)}
-            placeholder="Write your comment"
-            placeholderTextColor="black"
-            style={{paddingLeft: 30, paddingBottom: 10, color: 'black'}}
-          />
-
-          <Button title="add" onPress={CommentHandler} />
-        </View>
-
-        <Text
-          style={{
-            alignSelf: 'center',
-            fontSize: 20,
-            fontWeight: 'bold',
-            marginTop: 20,
-          }}>
-          {' '}
-          BIDS
-        </Text>
-
-        <View
-          style={{
-            borderWidth: 1,
-            borderColor: 'black',
-            backgroundColor: '#fff',
-            marginBottom: 20,
-          }}>
-          <FlatList data={bid} renderItem={renderItemBid} />
-        </View>
-
-        <View
-          style={{
-            flexDirection: 'row',
-            marginTop: 10,
-            borderWidth: 2,
-            borderBottomColor: 'black',
-            width: 270,
-            backgroundColor: 'white',
-            paddingBottom: 3,
-            marginBottom: 55,
-          }}>
-          <FontAwesome
-            name="dollar"
-            size={20}
-            style={{marginRight: 20, marginTop: 14}}
-          />
-          <TextInput
-            value={bidPrice}
-            
-            onChangeText={t=>setBidPrice(t)}
-            placeholder="Place your Bid"
-            placeholderTextColor="black"
-            style={{paddingLeft: 30, paddingBottom: 10, color: 'black'}}
-          />
-          <View>
-           <Button title="add" onPress={postBid} />
-        </View>
-        </View> */}
       </ScrollView>
     </View>
   );

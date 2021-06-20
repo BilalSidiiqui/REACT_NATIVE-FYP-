@@ -96,6 +96,13 @@ return (
                   }>
                   <Text style={Styles.buttonText}>Privacy</Text>
                 </TouchableOpacity>
+                <TouchableOpacity
+                  style={Styles.buttonContainer}
+                  onPress={() =>
+                    navigation.navigate('TermsService')
+                  }>
+                  <Text style={Styles.buttonText}>Terms & Services</Text>
+                </TouchableOpacity>
 
                 <TouchableOpacity
                   style={Styles.buttonContainer}

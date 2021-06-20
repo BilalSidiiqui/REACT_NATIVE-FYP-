@@ -15,20 +15,33 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
+import {URL} from './utils/constant';
 
 const Washlist = () => {
   const navigation = useNavigation();
   const [product, setproduct] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-
   const [filterproduct, setfilterproduct] = useState([]);
-  const url = `https://artmandibackend.herokuapp.com/Watchlist/?user=`;
-  const filterurl = 'https://artmandibackend.herokuapp.com/Listing/';
+  const url = URL.Url + `Watchlist/?user=`;
+  const filterurl = URL.Url+'Listing/';
   const auth = useSelector(state => state.auth);
   const isFocused = useIsFocused();
 
-  useEffect(async() => {
-   await axios.get(url + auth.user.user_id).then(resp => {
+  useEffect(async () => {
+    await axios.get(url + auth.user.user_id).then(resp => {
+      setproduct(resp.data);
+      let array = product.map(e => e.listing);
+      axios.get(filterurl).then(response => {
+        setfilterproduct(response.data);
+        let array2 = response.data.filter(e => array.includes(e.id));
+        setfilterproduct(array2);
+      });
+    });
+  }, [isFocused]);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await axios.get(url + auth.user.user_id).then(resp => {
       setproduct(resp.data);
       console.log(product, '1st attmpt');
       let array = product.map(e => e.listing);
@@ -38,32 +51,11 @@ const Washlist = () => {
         console.log(filterproduct, '3rd console');
         let array2 = response.data.filter(e => array.includes(e.id));
         setfilterproduct(array2);
+        setRefreshing(false);
         console.log(array2, '4th consloe');
       });
     });
-  
-  
-  }, [isFocused]);
-
-const onRefresh=async()=>{
-  setRefreshing(true);
-
-  await axios.get(url + auth.user.user_id).then(resp => {
-    setproduct(resp.data);
-    console.log(product, '1st attmpt');
-    let array = product.map(e => e.listing);
-    console.log(array, '2nd console');
-    axios.get(filterurl).then(response => {
-      setfilterproduct(response.data);
-      console.log(filterproduct, '3rd console');
-      let array2 = response.data.filter(e => array.includes(e.id));
-      setfilterproduct(array2);
-      setRefreshing(false);
-     
-      console.log(array2, '4th consloe');
-    });
-  });
-}
+  };
   const renderItem = ({item}) => {
     return (
       <View
@@ -88,15 +80,25 @@ const onRefresh=async()=>{
     );
   };
   return (
-
-    <ScrollView refreshControl={<RefreshControl
-      colors={["#9Bd35A", "#689F38"]}
-      refreshing={refreshing}
-      onRefresh={onRefresh} />} >
-      <FlatList  refreshControl={<RefreshControl
-      colors={["#9Bd35A", "#689F38"]}
-      refreshing={refreshing}
-      onRefresh={onRefresh} />}  data={filterproduct} renderItem={(item)=>renderItem(item)} />
+    <ScrollView
+      refreshControl={
+        <RefreshControl
+          colors={['#9Bd35A', '#689F38']}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+        />
+      }>
+      <FlatList
+        refreshControl={
+          <RefreshControl
+            colors={['#9Bd35A', '#689F38']}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
+        data={filterproduct}
+        renderItem={item => renderItem(item)}
+      />
     </ScrollView>
   );
 };

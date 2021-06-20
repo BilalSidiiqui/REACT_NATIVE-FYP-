@@ -9,6 +9,8 @@ import IconAdd from 'react-native-vector-icons/Ionicons';
 import Logout from './Logout';
 import Washlist from './Washlist';
 import seller from './seller';
+
+import TermsService from './TermService';
 import About from './About';
 import { View,Text, TouchableOpacity } from 'react-native'
 import SideMenu from "../screens/Component/sideMenu"
@@ -121,6 +123,13 @@ const HomeStackScreen =  ({navigation})=>(
           <HomeStack.Screen
         name="Policies"
         component={Policies}
+        options={{
+          headerShown: false,
+        }}
+      />
+        <HomeStack.Screen
+        name="TermsService"
+        component={TermsService}
         options={{
           headerShown: false,
         }}

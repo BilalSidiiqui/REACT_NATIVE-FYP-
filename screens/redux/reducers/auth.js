@@ -46,7 +46,7 @@ export default (state = initialState, action = {}) => {
       
     case set_loading:
       return {
-        loading: true,
+        loading: payload,
       };
     default:
       return state;

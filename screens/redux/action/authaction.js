@@ -30,3 +30,35 @@ export function signup(data) {
   };
   
 }
+
+// export async function Post_Bid(data) {
+//   console.log(data);
+//   return async dispatch => {
+//     dispatch({type:set_loading,payload:true})
+//     try {
+//       console.log(data);
+//       var formdata = new FormData();
+//       formdata.append('listing', data.listing);
+//       formdata.append('user', data.user);
+//       formdata.append('bid_price', data.bid_price);
+//       console.log(formdata);
+//       // var config = {
+//       //   method: 'post',
+//       //   url: URL.Url + 'Bid/',
+//       //   data: formdata,
+//       // };
+//       // console.log(config);
+//       // const response = await axios(config);
+//       // if (response) {
+//       //   alert('Bid Placed');
+//       //   dispatch({type:set_loading,payload:false})
+   
+//       // }
+//     } catch (error) {
+//       alert(error?.message);
+//       dispatch({type:set_loading,payload:false})
+   
+//     } 
+//      };
+
+// }
