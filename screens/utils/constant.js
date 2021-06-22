@@ -1,3 +1,3 @@
 export const URL = {
-    Url: "https://artmandiapi.herokuapp.com/"
+    Url:"https://artmandibackend.herokuapp.com/"   // "https://artmandiapi.herokuapp.com/"
   };

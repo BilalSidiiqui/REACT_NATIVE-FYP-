@@ -40,7 +40,9 @@ const seller = ({navigation}) => {
     setShow(Platform.OS === 'ios');
     setDate(currentDate);
   };
+  console.log(date);
   const AddaProductHandler = async () => {
+    
     const formdata = new FormData();
     formdata.append('title', title);
     formdata.append('description', description);
