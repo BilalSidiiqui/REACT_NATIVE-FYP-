@@ -32,15 +32,15 @@ const Productdetails = props => {
   useEffect(() => {
     if (isFocused) {
       axios.get(url).then(res => {
-        axios.get(res.data.Comment).then(response => {
+        axios.get(res.data.Comment+`?listing=${props?.route?.params?.item.id}`).then(response => {
           setcomment(response.data);
-          // console.log('Comment', response.data);
+          console.log('Comment', response.data);
         });
       });
       axios.get(Bidurl).then(res => {
-        axios.get(res.data.Bid).then(response => {
+        axios.get(res.data.Bid+`?listing=${props?.route?.params?.item.id}`).then(response => {
           setBid(response.data);
-          // console.log('Bid*******', response.data);
+          console.log('Bid*******', response.data);
         });
       });
     }
