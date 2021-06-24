@@ -5,11 +5,12 @@ import Policies from "./Policies"
 import Homescreen from './Home';
 import Icon from 'react-native-vector-icons/Entypo';
 import IconLogout from 'react-native-vector-icons/MaterialCommunityIcons';
+import IconCart from 'react-native-vector-icons/FontAwesome';
 import IconAdd from 'react-native-vector-icons/Ionicons';
 import Logout from './Logout';
 import Washlist from './Washlist';
 import seller from './seller';
-
+import Sold from "../../REACT_NATIVE-FYP-/screens/Sold"
 import TermsService from './TermService';
 import About from './About';
 import { View,Text, TouchableOpacity } from 'react-native'
@@ -63,12 +64,12 @@ const BottomTabScreen =()=>(
     />
     <Tab.Screen
       name="About"
-      component={AboutStackScreen}
+      component={Sold}
       options={{
-        tabBarLabel: 'About',
+        tabBarLabel: 'Sold',
         tabBarColor: '#009387',
         tabBarIcon: ({ color }) => (
-          <Icon name="info-with-circle" color={color} size={26} />
+          <IconCart name="shopping-bag" color={color} size={26} />
         ),
       }}
     />
