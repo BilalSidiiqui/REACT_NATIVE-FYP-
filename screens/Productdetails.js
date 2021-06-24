@@ -64,7 +64,7 @@ const Productdetails = props => {
         alert('Comment Posted Successfully!');
       }
     } catch (error) {
-      alert(error);
+      // alert(error);
       alert(error?.message);
     }
   };
@@ -121,9 +121,9 @@ const Productdetails = props => {
           justifyContent: 'space-between',
         }}>
         <View>
-          <Text>Username: {item.username}</Text>
+          <Text>Username: {item?.username}</Text>
         </View>
-        <Text> Price: {item.bid_price} $</Text>
+        <Text> Price: {item?.bid_price} $</Text>
       </View>
     );
   };
@@ -144,19 +144,11 @@ const Productdetails = props => {
             {' '}
             Description: {props?.route?.params?.item?.description}
           </Text>
-          <Text style={{fontSize: 20}}>
-            {' '}
-            Category: {props?.route?.params?.item?.category}
-          </Text>
-          <Text style={{fontSize: 20}}>
+            <Text style={{fontSize: 20}}>
             {' '}
             Starting Price: ${props?.route?.params?.item?.start_price}
           </Text>
-          <Text style={{fontSize: 20}}>
-            {' '}
-            BID END AT: {props?.route?.params?.item?.end_date}
-          </Text>
-        </View>
+           </View>
         <View
           style={{
             backgroundColor: 'white',

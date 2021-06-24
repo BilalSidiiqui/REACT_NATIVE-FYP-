@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, {useState, useEffect, useRef} from 'react';
-import {View, Image, FlatList, Text, StyleSheet, Button} from 'react-native';
+import {View, Image, FlatList, Text, StyleSheet, Button, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {URL} from './utils/constant';
@@ -53,14 +53,15 @@ const Products = () => {
     return (
       <View style={styles.ietm}>
         <Image
-          style={{width: '100%', height: 250, borderRadius: 20}}
+          style={styles.imageStyle}
           source={{uri: item.image}}
         />
         <View style={{marginVertical: 10}}>
-          <Text> TITLE: {item.title}</Text>
-          <Text> DESCRIPTION: {item.description}</Text>
-          <Text style={{fontSize: 14, color: 'white'}}>
-            {' '}
+        
+          <Text style={styles.textStyle}> Title: {item.title}</Text>
+        
+          <Text style={styles.textStyle}> Artist: {item.artist}</Text>
+          <Text style={styles.textStyle}>
             STARTING PRICE: ${item.start_price}
           </Text>
         </View>
@@ -83,11 +84,15 @@ const Products = () => {
   }  
         </View>
 
-        <Button
-          title="Buy Now"
+      <TouchableOpacity
           onPress={() => navigation.navigate('ProductDetails', {item})}
-        />
-      </View>
+      style={{backgroundColor:'white',padding:10,borderRadius:10}}
+      >
+        <Text>
+          Buy Now
+        </Text>
+      </TouchableOpacity>
+        </View>
     );
   };
 
@@ -99,11 +104,17 @@ const Products = () => {
 };
 
 const styles = StyleSheet.create({
+  imageStyle:{
+    width: '100%', height: 250, borderRadius: 20
+  },
   container: {
     flex: 1,
 
     paddingTop: 40,
     paddingHorizontal: 10,
+  },
+  textStyle:{
+    fontSize: 14, color: 'white'
   },
   ietm: {
     marginTop: 10,

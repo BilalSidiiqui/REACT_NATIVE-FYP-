@@ -10,6 +10,7 @@ import {
   TextInput,
   RefreshControl,
   TouchableOpacity,
+  StyleSheet,
   Button,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
@@ -53,7 +54,9 @@ const Washlist = () => {
         setfilterproduct(array2);
         setRefreshing(false);
         console.log(array2, '4th consloe');
-      });
+      }).catch((error)=>{
+        console.log(error);
+      })
     });
   };
   const renderItem = ({item}) => {
@@ -89,6 +92,21 @@ const Washlist = () => {
         />
       }>
       <FlatList
+      ListHeaderComponent={()=>(<View>
+         <View style={styles.header}>
+        <Text style={styles.text_header}>ARTMANDI</Text>
+
+        <Text
+          style={{
+            fontStyle: 'italic',
+            fontSize: 20,
+            marginTop: 5,
+          }}>
+          A platform where you can sell and buy your desired artworks!
+        </Text>
+      </View>
+    
+      </View>)}
         refreshControl={
           <RefreshControl
             colors={['#9Bd35A', '#689F38']}
@@ -103,3 +121,19 @@ const Washlist = () => {
   );
 };
 export default Washlist;
+
+const styles = StyleSheet.create({
+ 
+  header: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    paddingHorizontal: 20,
+    paddingBottom: 50,
+  },
+  text_header: {
+    fontWeight: 'bold',
+    fontSize: 30,
+    marginTop: 50,
+  },
+
+});

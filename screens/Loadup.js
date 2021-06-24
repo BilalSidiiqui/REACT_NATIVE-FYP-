@@ -7,6 +7,7 @@ const image = { uri: "https://papers.co/wallpaper/papers.co-nq33-space-galaxy-st
 
 export default function Loadup({navigation}) {
 
+
     const presshandlerOnload=async()=>{
         navigation.replace('Login')
         console.log(await AsyncStorage.getItem("user_id",''))
