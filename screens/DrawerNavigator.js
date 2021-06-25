@@ -5,6 +5,7 @@ import TabNavigator from "./MainTabScreen";
 import Loadup from './Loadup'
 import Login from './Login'
 import Register from './Register'
+import About from "./About";
 
 
 const Drawer = createDrawerNavigator();
@@ -17,6 +18,8 @@ const DrawerNavigator = () => {
      <Drawer.Screen name="Register" component={Register} options={{headerShown: false }}/>
       <Drawer.Screen name="Home" component={TabNavigator} />
       <Drawer.Screen name="Contact" component={Seller} />
+      <Drawer.Screen name="About" component={About} />
+ 
     </Drawer.Navigator>
   );
 };

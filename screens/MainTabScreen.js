@@ -13,6 +13,7 @@ import seller from './seller';
 import Sold from "./Sold"
 import TermsService from './TermService';
 import About from './About';
+
 import { View,Text, TouchableOpacity } from 'react-native'
 import SideMenu from "../screens/Component/sideMenu"
 const HomeStack = createStackNavigator();
@@ -63,7 +64,7 @@ const BottomTabScreen =()=>(
       }}
     />
     <Tab.Screen
-      name="About"
+      name="Solde"
       component={Sold}
       options={{
         tabBarLabel: 'Sold',
@@ -177,24 +178,6 @@ const HomeStackScreen =  ({navigation})=>(
         }>
           <WashlistStack.Screen name="My Watchlist" component={Washlist} />
         </WashlistStack.Navigator> 
-  );
-  const AboutStackScreen =  ({Navigation})=>(
-    <AboutStack.Navigator screenOptions={
-      
-          {
-            headerShown:false,
-            headerStyle:{
-              backgroundColor : '#009387'
-            },
-            headerTintColor: '#fff',
-            headerTitleStyle: {
-              fontWeight:'bold'
-            }
-          }
-        }>
-          <AboutStack.Screen name="About" component={About} />
-        </AboutStack.Navigator> 
-        
   );
 
  
